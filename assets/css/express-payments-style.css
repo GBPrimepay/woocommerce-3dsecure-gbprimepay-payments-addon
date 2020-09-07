@@ -1,0 +1,21 @@
+
+    .woocommerce .woocommerce-checkout .col2-set .col-1,
+    .woocommerce .woocommerce-checkout .col2-set .col-2 {
+        float: none !important;
+        width: 100% !important;
+    }
+    .wc-gbprimepay-new-payment-method, #billing_country_field {
+      display:none !important;
+    }
+    .page-template-template-fullwidth-php .col2-set .form-row-first,
+    .page-template-template-fullwidth-php .col2-set .form-row-last,
+    .checkout .woocommerce-checkout .col2-set .col-1,
+    .checkout .woocommerce-checkout .col2-set .col-2,
+    .woocommerce-checkout-review-order, #order_review_heading, #customer_details {
+      float: none !important;
+      width: 100% !important;
+  }
+    
+    .woocommerce .woocommerce-checkout .col2-set .col-1 {
+        margin-bottom: 30px;
+    }
