@@ -37,6 +37,7 @@ function extra_product_name($checkout)
         }
     }
 }
+
 add_action( 'woocommerce_admin_order_data_after_billing_address', 'bbloomer_show_new_checkout_field_order', 10, 1 );
 function bbloomer_show_new_checkout_field_order( $order ) {    
    $order_id = $order->get_id();
@@ -60,13 +61,11 @@ function misha_add_to_cart_on_custom_page(){
     global $woocommerce;		
 $extra_product_price = WC()->session->get('gbp_express_pay_session');
 $extra_product_name = WC()->session->get('gbp_express_name_session');
-    // WC()->cart->empty_cart();
+    WC()->cart->empty_cart();
     // WC()->cart->add_to_cart( $gbp_express_product_id ); 
-				$product_cart_id = WC()->cart->generate_cart_id( $gbp_express_product_id );
-					if(!WC()->cart->find_product_in_cart( $product_cart_id )) {
-    // WC()->cart->add_to_cart($gbp_express_product_id, 1, NULL, NULL, array('price' => $extra_product_price,'sale_price' => $extra_product_price,'regular_price' => $extra_product_price));
-    
-    WC()->cart->add_to_cart( $gbp_express_product_id ); 
+$product_cart_id = WC()->cart->generate_cart_id( $gbp_express_product_id );
+if(!WC()->cart->find_product_in_cart( $product_cart_id )) {    
+    WC()->cart->add_to_cart( $gbp_express_product_id, 1); 
   }
 	}
 }

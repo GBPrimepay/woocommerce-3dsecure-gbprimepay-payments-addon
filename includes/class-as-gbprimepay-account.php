@@ -28,7 +28,7 @@ if (!class_exists('AS_Gbprimepay_ACCOUNT')):
         {
                 $options = get_option('gbprimepay_account_settings');
                 if (isset($options['static_link']) and ('yes' === $options['static_link'])) {
-                    $_txtStaticLink = 'GBPrimePay Static Link: ' . home_url('/GBPrimePayStaticLink/');
+                    $_txtStaticLink = 'GBPrimePay Static Link: ' . home_url('/express-payments/');
                 } else {
                     $_txtStaticLink = 'GBPrimePay Static Link: Disable';
                 }
