@@ -38,6 +38,12 @@ function extra_product_name($checkout)
     }
 }
 
+add_action('wp_enqueue_scripts', 'override_woo_frontend_scripts');
+function override_woo_frontend_scripts() {
+    wp_deregister_script('wc-credit-card-form');
+    wp_enqueue_script('wc-credit-card-form', plugin_dir_url( __DIR__ ) . '../woocommerce/assets/js/frontend/credit-card-form.js', array('jquery', 'jquery-payment'), null, true);
+}
+
 add_action( 'woocommerce_admin_order_data_after_billing_address', 'bbloomer_show_new_checkout_field_order', 10, 1 );
 function bbloomer_show_new_checkout_field_order( $order ) {    
    $order_id = $order->get_id();

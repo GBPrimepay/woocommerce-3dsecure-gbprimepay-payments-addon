@@ -57,9 +57,9 @@ if (!class_exists('AS_Gbprimepay')) {
             add_filter('woocommerce_coupons_enabled', array($this, 'disable_coupon_field_on_express_checkout'));
             add_filter('woocommerce_order_button_html', array($this, "express_place_order_button_alt"), 9999);
             add_action('woocommerce_is_purchasable', array(&$this, 'pewc_filter_is_purchasable'), 10, 2);
-            add_action("wp_loaded", array($this, "update_donation"));
-						add_action("template_redirect", array($this, "remove_donation"));
-						add_action( 'woocommerce_update_cart_action_cart_updated', array($this, "remove_donation"));
+            // add_action("wp_loaded", array($this, "update_donation"));
+            add_action("template_redirect", array($this, "remove_donation"));
+            add_action( 'woocommerce_update_cart_action_cart_updated', array($this, "remove_donation"));
             // qrcode
             add_action('wp_ajax_check_qrcode_order_status', array($this, 'my_check_qrcode_order_status'));
             add_action('wp_ajax_nopriv_check_qrcode_order_status', array($this, 'my_check_qrcode_order_status'));
