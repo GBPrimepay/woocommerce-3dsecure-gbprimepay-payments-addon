@@ -55,12 +55,12 @@ add_action( 'woocommerce_admin_order_data_after_billing_address', 'bbloomer_show
 function bbloomer_show_new_checkout_field_order( $order ) {    
    $order_id = $order->get_id();
    if ( get_post_meta( $order_id, 'extra_product_name', true ) ) echo '<p><strong>Product:</strong> ' . get_post_meta( $order_id, 'extra_product_name', true ) . '</p>';
-   if ( get_post_meta( $order_id, 'extra_product_price', true ) ) echo '<p><strong>Price:</strong> ' . get_post_meta( $order_id, 'extra_product_price', true ) . '</p>';
+   if ( get_post_meta( $order_id, 'extra_product_price', true ) ) echo '<p><strong>Price:</strong> ' . str_replace('NUMBER', number_format(get_post_meta( $order_id, 'extra_product_price', true ), 2), '฿NUMBER') . '</p>';
 }
 add_action( 'woocommerce_email_after_order_table', 'bbloomer_show_new_checkout_field_emails', 20, 4 );
 function bbloomer_show_new_checkout_field_emails( $order, $sent_to_admin, $plain_text, $email ) {
   if ( get_post_meta( $order->get_id(), 'extra_product_name', true ) ) echo '<p><strong>Product:</strong> ' . get_post_meta( $order->get_id(), 'extra_product_name', true ) . '</p>';
-  if ( get_post_meta( $order->get_id(), 'extra_product_price', true ) ) echo '<p><strong>Price:</strong> ' . get_post_meta( $order->get_id(), 'extra_product_price', true ) . '</p>';
+  if ( get_post_meta( $order->get_id(), 'extra_product_price', true ) ) echo '<p><strong>Price:</strong> ' . str_replace('NUMBER', number_format(get_post_meta( $order->get_id(), 'extra_product_price', true ), 2), '฿NUMBER') . '</p>';
 }
 add_action( 'woocommerce_email_after_order_table', 'bbloomer_display_payment_type_name_emails', 15 );
 function bbloomer_display_payment_type_name_emails( $order ) {

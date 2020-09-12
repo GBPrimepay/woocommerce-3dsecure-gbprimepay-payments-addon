@@ -864,6 +864,7 @@ if (!class_exists('AS_Gbprimepay')) {
             include_once dirname(__FILE__) . '/includes/class-as-gbprimepay-gateway-qrcredit.php';
             include_once dirname(__FILE__) . '/includes/class-as-gbprimepay-gateway-barcode.php';
             include_once dirname(__FILE__) . '/includes/front-end-functions.php';
+            include_once dirname(__FILE__) . '/includes/back-end-functions.php';
             add_filter('woocommerce_payment_gateways', array($this, 'add_gateways'));
         }
         public function add_gateways($methods)
