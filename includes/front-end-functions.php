@@ -12,7 +12,7 @@ function extra_product_name($checkout)
     $pagename = get_query_var('pagename');
     if (get_post_type() && get_post_type() === 'page') {
         if ($pagename && $pagename === 'express-payments') {
-            echo '<div id="divextra_product_name"><h2>' . __('Product information') . '</h2>';
+            echo '<div class="woocommerce-additional-fields" id="divextra_product_name"><h3>' . __('Product information') . '</h3>';
             woocommerce_form_field('extra_product_name', array(
                 'type' => 'text',
                 'class' => array(
@@ -42,6 +42,13 @@ add_action('wp_enqueue_scripts', 'override_woo_frontend_scripts');
 function override_woo_frontend_scripts() {
     wp_deregister_script('wc-credit-card-form');
     wp_enqueue_script('wc-credit-card-form', plugin_dir_url( __DIR__ ) . '../woocommerce/assets/js/frontend/credit-card-form.js', array('jquery', 'jquery-payment'), null, true);
+    wp_enqueue_script(
+        'express-payments-script',
+        AS_GBPRIMEPAY_PLUGIN_URL . '/assets/js/express-payments-script.js',
+        array(),
+        false,
+        true
+    );
 }
 
 add_action( 'woocommerce_admin_order_data_after_billing_address', 'bbloomer_show_new_checkout_field_order', 10, 1 );
@@ -71,7 +78,7 @@ $extra_product_name = WC()->session->get('gbp_express_name_session');
     // WC()->cart->add_to_cart( $gbp_express_product_id ); 
 $product_cart_id = WC()->cart->generate_cart_id( $gbp_express_product_id );
 if(!WC()->cart->find_product_in_cart( $product_cart_id )) {    
-    WC()->cart->add_to_cart( $gbp_express_product_id, 1); 
+    $_cart_item_key = WC()->cart->add_to_cart( $gbp_express_product_id, 1);
   }
 	}
 }

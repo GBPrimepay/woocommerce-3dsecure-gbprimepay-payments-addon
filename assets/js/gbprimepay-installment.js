@@ -181,13 +181,11 @@ jQuery(function($) {
             },
             termOnChange: function () {
 
-
-
             var get_amount = $("div#gbprimepay-payment-installment-data").data().amount;
             var get_bankimg = $("div#gbprimepay-payment-installment-data").data().bankimg;
 
-            var varBank = $('select[id=gbprimepay_installment-bankcode] option').filter(':selected').val();
-            var varSelected = $('select[id=gbprimepay_installment-term] option').filter(':selected').val();
+            var varBank = $('select[name=gbprimepay_installment-bankcode] option').filter(':selected').val();
+            var varSelected = $('select[name=gbprimepay_installment-term] option').filter(':selected').val();
             var varDivision = (parseFloat(get_amount) / varSelected);
             var isDecimal = (varDivision - Math.floor(varDivision)) !== 0;
             var varDivisionFix;
@@ -206,7 +204,7 @@ jQuery(function($) {
             };
             // var infotxt = varDivisionFix+' THB/month in '+varSelected+' payments';
 var infotxt = '';
-infotxt += '<table border="1" cellpadding="0" cellspacing="0" height="100%" width="100%" style="border: none !important;text-align: center; vertical-align: middle;margin:0;padding: 0;line-height: 1 !important;">';
+infotxt += '<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" style="border: none !important;text-align: center; vertical-align: middle;margin:0;padding: 0;line-height: 1 !important;">';
 infotxt += '<tbody>';
 infotxt += '<tr cellpadding="0" cellspacing="0" height="100%" width="100%" style="border: none !important;padding: 0;">';
 infotxt += '<td colspan="3" cellpadding="0" cellspacing="0" height="100%" width="100%" style="border: none !important;padding: 0 0 0.625em 0;">';
@@ -220,7 +218,7 @@ infotxt += '<tr cellpadding="0" cellspacing="0" height="100%" width="100%" style
 infotxt += '<td cellpadding="0" cellspacing="0" height="100%" width="2px;" style="border: none !important;padding: 0;"></td>';
 infotxt += '<td cellpadding="0" cellspacing="0" height="100%" width="100%" style="border: none !important;padding: 0;">';
 
-infotxt += '<table border="1" cellpadding="0" cellspacing="0" width="100%" style="border: none !important;text-align: center; vertical-align: middle;margin:0;padding: 0;line-height: 1 !important;">';
+infotxt += '<table border="0" cellpadding="0" cellspacing="0" width="100%" style="border: none !important;text-align: center; vertical-align: middle;margin:0;padding: 0;line-height: 1 !important;">';
 infotxt += '<tbody>';
 infotxt += '<tr cellpadding="0" cellspacing="0" height="100%" width="100%" style="border: none !important;margin:0;padding: 0;">';
 infotxt += '<td colspan="2" rowspan="2" cellpadding="0" cellspacing="0" height="100%" style="border: none !important;width:70%;border: none !important;text-align: right; vertical-align: middle;padding: 0;">';
@@ -315,8 +313,9 @@ infotxt += '</table>';
         }
     function genIssuers(){
       setTimeout(function(){
+        // window.console.log('');
         $('select[id=gbprimepay_installment-CCInstallmentToSelect]').toSelect();
-      }, 1000);
+      }, 100);
     }
 
     var bankcode = $('#gbprimepay_installment-publicKey').val();
@@ -334,7 +333,7 @@ infotxt += '</table>';
 
 setTimeout(function(){
   genIssuers();
-  window.console.log('genIssuers');
+//   window.console.log('genIssuers');
 }, 700);
 
         },
@@ -368,56 +367,14 @@ setTimeout(function(){
             }
         }
     };
-
-
-
-// String.prototype.addEventListener=function(eventHandler, functionToDo){
-// let selector=this;
-// document.body.addEventListener(eventHandler, function(e){
-//     e=(e||window.event);
-//     e.preventDefault();
-//     const path=e.path;
-//     path.forEach(function(elem){
-//     const selectorsArray=document.querySelectorAll(selector);
-//     selectorsArray.forEach(function(slt){
-//         if(slt==elem){
-//         // window.console.log(slt);
-//         // if(typeof functionToDo=="function") functionToDo(slt=elem, e=e);
-        
-//     if(elem.id = 'payment_method_gbprimepay_installment'){
-//         if(elem.checked = true){
-//         genIssuers();
-//         // window.console.log('genIssuersdelayload');
-//     }}
-
-//         }
-//     });
-//     });
-// });
-// }
-// "input[name='payment_method']".addEventListener("click", function(element, e){
-//     window.console.log('addEventListener');
-// });
-
-// document.body.addEventListener('click', function (evt) {
-//     if (evt.target.className === 'payment_method_gbprimepay_installment') {
-//         window.console.log('addEventListener');
-//     }
-// }, false);
-
-$(document)
-    .on('click', '.payment_method_gbprimepay_installment', function(e) {
+$(document).on('click', '.payment_method_gbprimepay_installment', function(e) {
         if(
             $(e.target).is('label[for]')
             &&
             $('input#' + $(e.target).attr('for')).length
         ) {
-            // window.console.log('addEventListener');
             genIssuers();
             return;
         }
-    })
-;
-
-
+    });
 });

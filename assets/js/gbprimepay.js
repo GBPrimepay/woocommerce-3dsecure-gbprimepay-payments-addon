@@ -52,13 +52,13 @@ jQuery(function($) {
     se_gbprimepay_form.isGbprimepayDefault();
 
 
-addDynamicEventListener(document.body, 'click', '.woocommerce-SavedPaymentMethods-new, li', function (e) {
-        if(e.target.id = 'payment_method_gbprimepay'){
-        if(e.target.checked = true){
-            se_gbprimepay_form.isGbprimepayDefault();
-            // $('#wc-gbprimepay-payment-token-new').attr('checked', true).trigger('change');
-    }}
-});
+// addDynamicEventListener(document.body, 'click', '.woocommerce-SavedPaymentMethods-new, li', function (e) {
+//         if(e.target.id = 'payment_method_gbprimepay'){
+//         if(e.target.checked = true){
+//             se_gbprimepay_form.isGbprimepayDefault();
+//             // $('#wc-gbprimepay-payment-token-new').attr('checked', true).trigger('change');
+//     }}
+// });
 
 });
 ! function (e) {
@@ -80,4 +80,10 @@ addDynamicEventListener(document.body, 'click', '.woocommerce-SavedPaymentMethod
 		}(r, o), n)
 	}
 }(this);
+jQuery(document.body).on('removed_from_cart updated_cart_totals', function () {
+    // location.reload();
+  window.console.log('');
+  window.console.log('reload triggered');
+  window.console.log('');
+});
 

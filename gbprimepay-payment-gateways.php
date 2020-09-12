@@ -55,9 +55,9 @@ if (!class_exists('AS_Gbprimepay')) {
             add_action('wp_ajax_gbp_express_pay', array($this, "update_donation"));
             add_action('wp_ajax_nopriv_gbp_express_pay', array($this, "update_donation"));
             add_filter('woocommerce_coupons_enabled', array($this, 'disable_coupon_field_on_express_checkout'));
-            add_filter('woocommerce_order_button_html', array($this, "express_place_order_button_alt"), 9999);
+            add_filter('woocommerce_review_order_before_payment', array($this, "express_place_order_info_display"), 10, 2);
             add_action('woocommerce_is_purchasable', array(&$this, 'pewc_filter_is_purchasable'), 10, 2);
-            // add_action("wp_loaded", array($this, "update_donation"));
+            
             add_action("template_redirect", array($this, "remove_donation"));
             add_action( 'woocommerce_update_cart_action_cart_updated', array($this, "remove_donation"));
             // qrcode
@@ -89,7 +89,7 @@ if (!class_exists('AS_Gbprimepay')) {
             add_filter('woocommerce_payment_gateway_get_new_payment_method_option_html_label', 'filter_woocommerce_payment_gateway_get_new_payment_method_option_html_label', 10, 2);
             add_filter('woocommerce_variable_free_price_html', 'hide_free_price_notice');
             add_filter('woocommerce_free_price_html', 'hide_free_price_notice');
-						add_filter('woocommerce_variation_free_price_html', 'hide_free_price_notice');
+			add_filter('woocommerce_variation_free_price_html', 'hide_free_price_notice');
 						
 
 
@@ -341,14 +341,11 @@ if (!class_exists('AS_Gbprimepay')) {
                     }
                 }
             }}
-        public function express_place_order_button_alt()
+        public function express_place_order_info_display()
         {
-            $path = basename($_SERVER['HTTP_REFERER']);
-            if ($path == "express-payments") {
-                return '<div id="gbprimepay_express-info" name="gbprimepay_express-info" class="form-control" style="margin:30px 0 40px 0;"></div><button type="submit" class="button alt" name="woocommerce_checkout_place_order" id="place_order" value="Place order" data-value="Place order">Continue to payment</button>';
-            } else {
-                return '<button type="submit" class="button alt" name="woocommerce_checkout_place_order" id="place_order" value="Place order" data-value="Place order">Place order</button>';
-            }
+            if( (is_page( 'express-payments' ))) {
+                echo '<div id="gbprimepay_express-info" name="gbprimepay_express-info" class="form-control" style="margin:10px 0 30px 0;"></div>';
+            } 
         }
         public function add_custom_donation_price($_cart)
         {
@@ -362,109 +359,97 @@ if (!class_exists('AS_Gbprimepay')) {
                 }
             }
         }
-        public function add_to_cart_programmatically()
-        {
-            if (isset($_POST["extra_product_name"]) && !empty($_POST["extra_product_name"])) {
-                $extra_product_name = $_POST["extra_product_name"];
-            }
-            if (isset($_POST["extra_product_price"]) && is_numeric($_POST["extra_product_price"])) {
-                $extra_product_price = $_POST["extra_product_price"];
-            }
-            $gbp_express_product_id = get_option('gbp_express_product_id');
-            // $donation_amount = $amount;
-            $product_cart_id = WC()->cart->generate_cart_id($gbp_express_product_id);
-            // exit;
-            // if(($extra_product_price) && ($extra_product_name)) {
-            // echo 'add_to_cart_programmatically';
-            // exit;
-            if (!WC()->cart->find_product_in_cart($product_cart_id)) {
-                WC()->cart->add_to_cart($gbp_express_product_id);
-                // WC()->cart->empty_cart();
-                // WC()->cart->add_to_cart($gbp_express_product_id, 1, NULL, NULL, array('price' => $extra_product_price, 'name' => $extra_product_name));
-                //                 echo 'add_to_cart_programmatically';
-                //                 echo '<pre>';
-                //                 print_r($_POST);
-                //                 echo '</pre>';
-                //                 echo $order_id;
-                //                 echo '<br>';
-                //                 // echo $data;
-                //                 echo '<br>';
-                //                 echo $gbp_express_product_id;
-                //                 echo '<br>';
-                //                 echo $extra_product_name;
-                //                 echo '<br>';
-                //                 echo $extra_product_price;
-                //                 echo '<br>';
-                //  $cart = WC()->cart->cart_contents;
-                //  echo '<pre>';
-                //  print_r($cart);
-                //  echo '</pre>';
-                // //  exit;
-                //  foreach( $cart as $cart_item_id=>$cart_item ) {
-                // $cart_item['new_meta_data'] = 'Your stuff goes here';
-                //  WC()->cart->cart_contents[$cart_item_id] = $cart_item;
-                //  }
-                //  WC()->cart->set_session();
-                //  exit;
-            } else {
-                // WC()->cart->empty_cart();
-                // WC()->cart->add_to_cart($gbp_express_product_id, 1, NULL, NULL, array('price' => $donation_amount));
-            }
-        }
-        /* function for add donation to cart */
-        public function donation_to_cart()
-        {
-            global $woocommerce;
-            $gbp_express_product_id = get_option('gbp_express_product_id');
-            $donation_amount = $this->get_donation_amount();
-            // echo $gbp_express_product_id;
-            // exit;
-            if ($donation_amount && is_numeric($donation_amount) && $donation_amount > 0) {
-                $taxable = false;
-                $woocommerce->cart->add_fee(__('Custom Price', 'rpdo'), $donation_amount, $taxable);
-                // $cart_item_data = array('price' => $donation_amount);
-                // $woocommerce->cart->add_to_cart( $gbp_express_product_id, 1, '', array(), $cart_item_data);
-                // $woocommerce->cart->add_to_cart($gbp_express_product_id, 1, NULL, NULL, array('price' => $donation_amount));
-                // echo $gbp_express_product_id;
-                // exit;
-                // $woocommerce->cart->add_to_cart($gbp_express_product_id);
-            }
-        }
+        
         /* add donation */
         public function update_donation()
-        {
-            if (isset($_POST["aname"]) && !empty($_POST["aname"])) {
-                $aname = $_POST["aname"];
-                $this->set_donation_aname($aname);
+        {   
+            $raw_post = @file_get_contents('php://input');
+            parse_str(html_entity_decode($raw_post), $payload);
+            if( !empty($payload['amount']) ){
+                $this->set_donation_amount($payload['amount']);
+                parse_str($payload['amount'], $payloaddata);
             }
-            if (isset($_POST["amount"]) && is_numeric($_POST["amount"])) {
-                $amount = $_POST["amount"];
-                $this->set_donation_amount($amount);
-                $this->wk_update_price;
+            if( !empty($payload['aname']) ){
+                $this->set_donation_aname($payload['aname']);
+                parse_str($payload['aname'], $payloaddata);
             }
+            $ret = array();
+            $ret['amount'] = $payload['amount'];
+            $ret['aname'] = $payload['aname'];
+            $ret['info_display'] = $this->display_donation($ret['amount'],$ret['aname']);
+            die(json_encode($ret));
+
         }
-				/* remove donation */
+        public function display_donation($extra_product_price,$extra_product_name)
+        {
+            if(( ($extra_product_price < 1) ) && ( empty($extra_product_name) )){
+                $ret  = '';
+                
+                $ret  .= '<table style="border: none !important; text-align: center; vertical-align: middle; margin: 0; line-height: 1 !important;" border="0" width="100%" cellspacing="0" cellpadding="0">';
+                $ret  .= '<tbody>';
+                $ret  .= '<tr style="border: none !important; padding: 0;">';
+                $ret  .= '<td style="border: none !important; padding: 0;background-color: transparent;line-height: 1 !important;" width="100%" height="0px;"></td>';
+                $ret  .= '</tr>';
+                $ret  .= '</tbody>';
+                $ret  .= '</table>';
+            }else{
+                $ret  = '';
+                
+                $ret  .= '<table style="border: none !important; text-align: center; vertical-align: middle; margin: 0; line-height: 1 !important;" border="0" width="100%" cellspacing="0" cellpadding="0">';
+                $ret  .= '<tbody>';
+                $ret  .= '<tr style="border: none !important; padding: 0;">';
+                $ret  .= '<td style="border: none !important; padding: 0;" width="2px;" height="100%">&nbsp;</td>';
+                $ret  .= '<td style="border: none !important; padding: 0;" width="100%" height="100%">';
+                $ret  .= '<table style="border: none !important; text-align: center; vertical-align: middle; margin: 0; padding: 20px 0px; line-height: 1 !important;" border="0" width="100%" cellspacing="0" cellpadding="0">';
+                $ret  .= '<tbody>';
+                $ret  .= '<tr style="border: none !important; padding: 0;">';
+                $ret  .= '<td style="border: none !important; text-align: center; vertical-align: middle; margin: 0; padding: 10px 0 0 0;" colspan="3" width="100%" height="100%">';
+                $ret  .= '<h1 style="border: none !important; width: 100%; margin: 0; padding: 0 5px 0 0; line-height: 1;"><strong>' . $extra_product_name . '</strong></h1>';
+                $ret  .= '</td>';
+                $ret  .= '</tr>';
+                $ret  .= '<tr style="border: none !important; padding: 0;">';
+                $ret  .= '<td style="border: none !important; text-align: center; vertical-align: middle; margin: 0; padding: 10px 0 10px 0;background-color: transparent;" colspan="3" width="100%" height="100%">';
+                $ret  .= '<span style="border: none !important; margin: 0; padding: 0 15px 0 0; line-height: 1 !important;">Custom Price:</span><span style="border: none !important; margin: 0; padding: 0; line-height: 1 !important;"><strong>' . $this->display_money_format($extra_product_price) . '</strong></span></td>';
+                $ret  .= '</tr>';
+                $ret  .= '</tbody>';
+                $ret  .= '</table>';
+                $ret  .= '</td>';
+                $ret  .= '<td style="border: none !important; padding: 0;" width="100%" height="100%">&nbsp;</td>';
+                $ret  .= '</tr>';
+                $ret  .= '</tbody>';
+                $ret  .= '</table>';
+                }
+            return $ret;
+        }
+        
+	function display_money_format($amount, $format = '', $digit = 2){
+		if( empty($format) ){
+			$format = '฿NUMBER';
+		}
+		if( strpos($format, 'NUMBER') === false ){
+			$format .= 'NUMBER';
+        }
+		return str_replace('NUMBER', number_format($amount, $digit), $format);
+	}
+		/* remove donation */
         public function remove_donation()
         {
-					if( !(is_page( 'express-payments' )) && !(is_cart())) {			
+					if( !(is_page( 'express-payments' ))) {			
 						$gbp_express_product_id = get_option('gbp_express_product_id');
 						$product_cart_id = WC()->cart->generate_cart_id($gbp_express_product_id);
-						$cartItemKey = WC()->cart->find_product_in_cart( $product_cart_id );
-						WC()->cart->remove_cart_item( $cartItemKey );
+                        $cartItemKey = WC()->cart->find_product_in_cart( $product_cart_id );              
+                        WC()->cart->remove_cart_item( $cartItemKey );
 					}else{
 						if( (is_page( 'express-payments' ))) {
 							
 							$extra_product_price = WC()->session->get('gbp_express_pay_session');
 							if($extra_product_price){
 								WC()->session->set( 'gbp_express_pay_session', '0.001' );
-								// WC()->session->__unset( 'gbp_express_pay_session' );
-								// WC()->session->__unset( 'gbp_express_aname_session' );
 						}}
-						if( (is_cart())) {
-							
-						}
 					}	
-				}
+                }
+                
+
         /* set donation amount to woo sesssion */
         public function set_donation_amount($amount)
         {
@@ -513,13 +498,6 @@ if (!class_exists('AS_Gbprimepay')) {
             $pagename = get_query_var('pagename');
             if (get_post_type() && get_post_type() === 'page') {
                 if ($pagename && $pagename === 'express-payments') {
-                    wp_enqueue_script(
-                        'express-payments-script',
-                        AS_GBPRIMEPAY_PLUGIN_URL . '/assets/js/express-payments-script.js',
-                        array('jquery'),
-                        false,
-                        true
-                    );
                     wp_enqueue_style('express-payments-style',
                         AS_GBPRIMEPAY_PLUGIN_URL . '/assets/css/express-payments-style.css');
                 }
