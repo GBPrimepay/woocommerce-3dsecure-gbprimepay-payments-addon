@@ -315,7 +315,7 @@ infotxt += '</table>';
       setTimeout(function(){
         // window.console.log('');
         $('select[id=gbprimepay_installment-CCInstallmentToSelect]').toSelect();
-      }, 100);
+      }, 500);
     }
 
     var bankcode = $('#gbprimepay_installment-publicKey').val();
@@ -373,8 +373,31 @@ $(document).on('click', '.payment_method_gbprimepay_installment', function(e) {
             &&
             $('input#' + $(e.target).attr('for')).length
         ) {
-            genIssuers();
+            setTimeout(function(){
+                genIssuers();
+            }, 600);
             return;
         }
     });
+
+
+
+
+
+
+jQuery('body').on('payment_method_selected', function(){
+        if ($("input[type=radio][name='payment_method'][value='gbprimepay_installment']").prop('checked') == true) {           
+                
+            // genIssuers();   
+            if($('select[name=gbprimepay_installment-bankcode]').find('option').length == 1){
+                setTimeout(function(){
+                    $("#payment .payment_methods .payment_method_gbprimepay_installment label").trigger('click');
+                    // window.console.log('gen-bankcodeB');
+                    // genIssuers();   
+                }, 400);
+            }
+  }
+});
+
+
 });

@@ -37,10 +37,11 @@
         $('select[name=gbprimepay_installment-bankcode]').val($("select[name=gbprimepay_installment-bankcode] option:first").val()).change();
         $('body').trigger('payment_method_selected');    
         setTimeout(function(){  
-        if($('select[name=gbprimepay_installment-bankcode]').find('option').length < 3){
+        if($('select[name=gbprimepay_installment-bankcode]').find('option').length == 1){
           $("#payment .payment_methods .payment_method_gbprimepay_installment label").trigger('click');
+          // window.console.log('click-bankcode');
           }
-        }, 600);
+        }, 900);
     }
   }                 
                       return false;

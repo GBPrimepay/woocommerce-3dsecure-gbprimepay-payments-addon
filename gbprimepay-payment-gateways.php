@@ -326,6 +326,13 @@ if (!class_exists('AS_Gbprimepay')) {
 }
             }
         }
+        public function set_session() {
+            if ( ! is_product() || ( isset( WC()->session ) && WC()->session->has_session() ) ) {
+                return;
+            }
+
+            WC()->session->set_customer_session_cookie( true );
+        }
         public function wk_update_price($cart_object)
         {
             global $woocommerce;

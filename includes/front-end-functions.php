@@ -84,3 +84,4 @@ if(!WC()->cart->find_product_in_cart( $product_cart_id )) {
 }
 
 add_action( 'woocommerce_before_calculate_totals', array( $this, 'wk_update_price' ) );
+add_action( 'template_redirect', array( $this, 'set_session' ) );
