@@ -113,7 +113,11 @@ if (!class_exists('AS_Gbprimepay')) {
                 // Check if set, if its not set add an error.
                 if (isset($_POST['extra_product_name'])) {
                     if (!$_POST['extra_product_name']) {
-                        wc_add_notice(__('<strong>Product Name</strong> is a required field.'), 'error');
+if (gbp_instances('LABEL_EN') == true) {                    
+    wc_add_notice( sprintf( __( '%s is a required field.', 'woocommerce' ), '<strong>Product Name</strong>' ), 'error' );
+}else{          
+    wc_add_notice( sprintf( __( '%s is a required field.', 'woocommerce' ), '<strong>ชื่อสินค้า</strong>' ), 'error' );
+}
                     }}
 						}
             add_action('woocommerce_checkout_process', 'my_custom_extra_product_price_checkout_field_process');
@@ -123,7 +127,11 @@ if (!class_exists('AS_Gbprimepay')) {
                 if (isset($_POST['extra_product_price'])) {
 									if (!$_POST['extra_product_price']) {
 										if ($_POST['extra_product_price'] < ('1')) {
-											wc_add_notice(__('<strong>Product Price</strong> is a required field.'), 'error');
+if (gbp_instances('LABEL_EN') == true) {                
+    wc_add_notice( sprintf( __( '%s is a required field.', 'woocommerce' ), '<strong>Product Price</strong>' ), 'error' );
+}else{          
+    wc_add_notice( sprintf( __( '%s is a required field.', 'woocommerce' ), '<strong>ราคาสินค้า</strong>' ), 'error' );
+}
 									}}}
             }
 /**

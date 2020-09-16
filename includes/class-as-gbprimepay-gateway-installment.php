@@ -99,12 +99,22 @@ class AS_Gateway_Gbprimepay_Installment extends WC_Payment_Gateway_eCheck
         } else {
             $pay_button_text = '';
         }
+        if (gbp_instances('LABEL_EN') == true) { 
+            $pay_paymentsimg_text = 'payments';
+            $pay_totalimg_text = 'Total Amount';
+        }else{
+            $pay_paymentsimg_text = 'เดือน';
+            $pay_totalimg_text = 'รวม';
+        }
+
 
         echo '<div
 			id="gbprimepay-payment-installment-data"
 			data-panel-label="' . esc_attr($pay_button_text) . '"
 			data-description="'. esc_attr($this->description2) .'"
 			data-email="' . esc_attr($user_email) . '"
+			data-paymentsimg="' . esc_attr($pay_paymentsimg_text) . '"
+			data-totalimg="' . esc_attr($pay_totalimg_text) . '"
 			data-bankimg="' . plugin_dir_url( __DIR__ ).'assets/images/' . '"
 			data-amount="' . esc_attr($total) . '">';
 
@@ -297,7 +307,9 @@ class AS_Gateway_Gbprimepay_Installment extends WC_Payment_Gateway_eCheck
             $gen_scb_installment_term = AS_Gbprimepay_API::gen_term_regex($check_scb_installment_term,'scb',esc_attr(WC()->cart->total));
             echo $gen_scb_installment_term;
 
-                echo '</select>
+
+if (gbp_instances('LABEL_EN') == true) {     
+ echo '</select>
         </p><p class="form-row form-row-wide">
         <label>Issuers Bank&nbsp;<span class="required">*</span></label>
         <select style="display:block;" id="' . esc_attr($this->id) . '-bankcode" name="' . esc_attr($this->id) . '-bankcode" class="form-control">
@@ -311,7 +323,22 @@ class AS_Gateway_Gbprimepay_Installment extends WC_Payment_Gateway_eCheck
 
       <div id="' . esc_attr($this->id) . '-info" name="' . esc_attr($this->id) . '-info" class="form-control" style="margin:30px 0 40px 0;"></div>';
 
-
+}else{       
+    echo '</select>
+           </p><p class="form-row form-row-wide">
+           <label>ธนาคาร&nbsp;<span class="required">*</span></label>
+           <select style="display:block;" id="' . esc_attr($this->id) . '-bankcode" name="' . esc_attr($this->id) . '-bankcode" class="form-control">
+               <option value="" data-keep="true">ระบุ ธนาคาร..</option>
+           </select>
+   
+           <label>จำนวนเดือน&nbsp;<span class="required">*</span></label>
+           <select style="display:block;" id="' . esc_attr($this->id) . '-term" name="' . esc_attr($this->id) . '-term" class="form-control">
+               <option value="" data-keep="true">ระบุ จำนวนเดือน..</option>
+           </select>
+   
+         <div id="' . esc_attr($this->id) . '-info" name="' . esc_attr($this->id) . '-info" class="form-control" style="margin:30px 0 40px 0;"></div>';
+   
+}
       echo '<div class="clear"></div>';
       echo '</fieldset>';
 

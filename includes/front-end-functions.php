@@ -5,6 +5,48 @@ if (!defined('ABSPATH')) {
 /**
  * Add custom field to the checkout page
  */
+
+function custom_wc_translations($translated){
+    if (gbp_instances('LABEL_EN') == true) {        
+        $text = array(    
+            'Product information' => 'Product information',
+            'Product Name' => 'Product Name',
+            'Product Price' => 'Product Price',
+            'Use a new Credit Card' => 'Use a new Credit Card',                
+        );
+    }else{
+        $text = array(
+            'Product information' => 'ข้อมูลสินค้า',
+            'Product Name' => 'ชื่อสินค้า',
+            'Product Price' => 'ราคาสินค้า',
+            'Use a new Credit Card' => 'ใช้บัตรเคดิต/เดบิตใหม่',        
+        );
+    }
+    $translated = str_ireplace(  array_keys($text),  $text,  $translated );
+    return $translated;
+}
+add_filter( 'gettext', 'custom_wc_translations', 20 );
+
+add_filter( 'woocommerce_default_address_fields', 'misha_remove_fields' );
+ 
+function misha_remove_fields( $fields ) {
+    unset( $fields["first_name"]['required'] );
+    unset( $fields["last_name"]['required'] );
+    unset( $fields["country"]['required'] );
+    unset( $fields["company"]['required'] );
+    unset( $fields["address_1"]['required'] );
+    unset( $fields["address_2"]['required'] );
+    unset( $fields["city"]['required'] );
+    unset( $fields["state"]['required'] );
+    unset( $fields["postcode"]['required'] );
+	return $fields;
+ 
+}
+add_filter( 'woocommerce_billing_fields', 'wc_npr_filter_phone', 10, 1 );
+function wc_npr_filter_phone( $address_fields ) {
+	$address_fields['billing_phone']['required'] = false;
+    return $address_fields;
+}
 add_action('woocommerce_after_order_notes', 'extra_product_name');
 function extra_product_name($checkout)
 {
@@ -12,7 +54,7 @@ function extra_product_name($checkout)
     $pagename = get_query_var('pagename');
     if (get_post_type() && get_post_type() === 'page') {
         if ($pagename && $pagename === 'express-payments') {
-            echo '<div class="woocommerce-additional-fields" id="divextra_product_name"><h3>' . __('Product information') . '</h3>';
+            echo '<div class="woocommerce-additional-fields" style="margin-top: 2em;" id="divextra_product_name"><h3>' . __('Product information') . '</h3>';
             woocommerce_form_field('extra_product_name', array(
                 'type' => 'text',
                 'class' => array(

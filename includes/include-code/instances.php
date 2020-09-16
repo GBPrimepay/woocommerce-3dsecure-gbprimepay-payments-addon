@@ -2,6 +2,7 @@
 
 function gbp_instances( $instances ) {
     $inc = array(
+    'LABEL_EN' => TRUE,
   	'3D_SECURE_PAYMENT' => TRUE,  // Enabling 3-D Secure payment(TRUE/FALSE).
                                   // Please be informed that you must contact GB Prime Pay support team before enable or disable this option.
                                   // (3-D Secure only available in Production Mode).

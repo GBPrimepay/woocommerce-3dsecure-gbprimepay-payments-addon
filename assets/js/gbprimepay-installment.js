@@ -183,6 +183,8 @@ jQuery(function($) {
 
             var get_amount = $("div#gbprimepay-payment-installment-data").data().amount;
             var get_bankimg = $("div#gbprimepay-payment-installment-data").data().bankimg;
+            var get_paymentsimg = $("div#gbprimepay-payment-installment-data").data().paymentsimg;
+            var get_totalimg = $("div#gbprimepay-payment-installment-data").data().totalimg;
 
             var varBank = $('select[name=gbprimepay_installment-bankcode] option').filter(':selected').val();
             var varSelected = $('select[name=gbprimepay_installment-term] option').filter(':selected').val();
@@ -227,10 +229,10 @@ infotxt += '</td>';
 infotxt += '<td cellpadding="0" cellspacing="0" height="50%" width="100%" style="border: none !important;text-align: left; vertical-align: bottom;padding: 0;"><span style="border: none !important;margin:0;padding:0;line-height: 1 !important;"><strong>x'+varSelected+'</strong></span></td>';
 infotxt += '</tr>';
 infotxt += '<tr cellpadding="0" cellspacing="0" height="100%" width="100%" style="border: none !important;padding: 0;">';
-infotxt += '<td cellpadding="0" cellspacing="0" height="50%" width="100%" style="border: none !important;width:25%;min-width170px;text-align: left; vertical-align: top;padding: 0 0 5px 0;"><span style="border: none !important;margin:0;padding:0;line-height: 1 !important;">payments</span></td>';
+infotxt += '<td cellpadding="0" cellspacing="0" height="50%" width="100%" style="border: none !important;width:25%;min-width170px;text-align: left; vertical-align: top;padding: 0 0 5px 0;"><span style="border: none !important;margin:0;padding:0;line-height: 1 !important;">'+get_paymentsimg+'</span></td>';
 infotxt += '</tr>';
 infotxt += '<tr cellpadding="0" cellspacing="0" height="100%" width="100%" style="border: none !important;padding: 0;">';
-infotxt += '<td colspan="3" cellpadding="0" cellspacing="0" height="100%" width="100%" style="border: none !important;text-align: center; vertical-align: middle;margin:0;padding: 10px 0 0 0;"><span style="border: none !important;margin:0;padding:0 15px 0 0;line-height: 1 !important;">Total Amount </span><span style="border: none !important;margin:0;padding:0;line-height: 1 !important;"><strong>'+currency_format(varAamountFix)+'</strong></span></td>';
+infotxt += '<td colspan="3" cellpadding="0" cellspacing="0" height="100%" width="100%" style="border: none !important;text-align: center; vertical-align: middle;margin:0;padding: 10px 0 0 0;"><span style="border: none !important;margin:0;padding:0 15px 0 0;line-height: 1 !important;">'+get_totalimg+' </span><span style="border: none !important;margin:0;padding:0;line-height: 1 !important;"><strong>'+currency_format(varAamountFix)+'</strong></span></td>';
 infotxt += '</tr>';
 infotxt += '</tbody>';
 infotxt += '</table>';

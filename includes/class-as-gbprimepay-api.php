@@ -125,6 +125,7 @@ class AS_Gbprimepay_API {
       $echoterm = '';
       if(!empty($pass_array)){
       if(($total >= 3000) && (($total/(min($pass_array))) >= 500)){
+if (gbp_instances('LABEL_EN') == true) { 
       switch ($issuers) {
         case 'kasikorn':
           $echoterm .= '<optgroup label="TextValue[\'Kasikornbank Public Company Limited.\',\'004\']">';
@@ -151,6 +152,35 @@ class AS_Gbprimepay_API {
           $echoterm .= '<option value="' . $value . '">' . $value . ' months</option>';
         }
       }
+    
+    }else{
+        switch ($issuers) {
+          case 'kasikorn':
+            $echoterm .= '<optgroup label="TextValue[\'ธนาคารกสิกรไทย จํากัด (มหาชน)\',\'004\']">';
+          break;
+          case 'krungthai':
+            $echoterm .= '<optgroup label="TextValue[\'ธนาคารกรุงไทย จํากัด (มหาชน)\',\'006\']">';
+          break;
+          case 'thanachart':
+            $echoterm .= '<optgroup label="TextValue[\'ธนาคารธนชาต จํากัด (มหาชน)\',\'065\']">';
+          break;
+          case 'ayudhya':
+            $echoterm .= '<optgroup label="TextValue[\'ธนาคารกรุงศรีอยุธยา จํากัด (มหาชน)\',\'025\']">';
+          break;
+          case 'firstchoice':
+            $echoterm .= '<optgroup label="TextValue[\'กรุงศรีเฟิร์สช้อยส์ \',\'026\']">';
+          break;
+          case 'scb':
+            $echoterm .= '<optgroup label="TextValue[\'ธนาคารไทยพาณิชย์ จํากัด (มหาชน)\',\'014\']">';
+          break;
+        }
+  
+        foreach($pass_array as $key=>$value){
+          if(($total >= 3000) && (($total/($value)) >= 500)){
+            $echoterm .= '<option value="' . $value . '">' . $value . ' เดือน</option>';
+          }
+        }
+    }
           $echoterm .= '</optgroup>';
           }
           }
